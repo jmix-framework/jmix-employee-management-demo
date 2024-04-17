@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      xmlns:c="http://jmix.io/schema/flowui/jpql-condition"
+      title="msg://employeeListView.title"
+      focusComponent="employeesDataGrid">
+    <data>
+        <collection id="employeesDc"
+                    class="com.company.sample.entity.Employee">
+            <fetchPlan extends="_base">
+                <property name="id"/>
+                <property name="department" fetchPlan="_instance_name"/>
+            </fetchPlan>
+            <loader id="employeesDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from Employee e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <urlQueryParameters>
+            <genericFilter component="genericFilter"/>
+            <pagination component="pagination"/>
+        </urlQueryParameters>
+    </facets>
+    <actions>
+        <action id="selectAction" type="lookup_select"/>
+        <action id="discardAction" type="lookup_discard"/>
+    </actions>
+    <layout>
+        <genericFilter id="genericFilter"
+                       dataLoader="employeesDl">
+            <properties include=".*"/>
+        </genericFilter>
+        <hbox id="buttonsPanel" classNames="buttons-panel">
+            <button id="createBtn" action="employeesDataGrid.create"/>
+            <button id="editBtn" action="employeesDataGrid.edit"/>
+            <button id="removeBtn" action="employeesDataGrid.remove"/>
+            <button id="countFTEBtn" text="Count FTE"/>
+            <simplePagination id="pagination" dataLoader="employeesDl"/>
+        </hbox>
+        <dataGrid id="employeesDataGrid"
+                  width="100%"
+                  minHeight="20em"
+                  dataContainer="employeesDc"
+                  columnReorderingAllowed="true">
+            <actions>
+                <action id="create" type="list_create"/>
+                <action id="edit" type="list_edit"/>
+                <action id="remove" type="list_remove"/>
+            </actions>
+            <columns resizable="true">
+                <column property="dateofbirth"/>
+                <column property="department"/>
+                <column property="gender"/>
+                <column property="name"/>
+                <column property="position"/>
+                <column property="salary"/>
+            </columns>
+        </dataGrid>
+        <hbox id="lookupActions" visible="false">
+            <button id="selectBtn" action="selectAction"/>
+            <button id="discardBtn" action="discardAction"/>
+        </hbox>
+    </layout>
+</view>
